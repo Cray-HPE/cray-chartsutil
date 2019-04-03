@@ -27,21 +27,29 @@ if [[ "$command" == "--help" ]] || [[ "$command" == "-h" ]] || [[ "$command" == 
   exit 0
 fi
 
-if [ -f /mounted/Chart.yaml ]; then
+if [[ -f /mounted/Chart.yaml ]]; then
   chart_name=$(cat /mounted/Chart.yaml | grep ^name: | awk -F ':' '{print $2}')
   chart_name=$(echo $chart_name | sed 's|\s+||g')
   chart_name=$(echo $chart_name | sed 's|"||g')
+  if [ -s /charts/$chart_name ]; then
+    rm /charts/$chart_name
+  fi
   ln -s /mounted /charts/$chart_name
 else
-  for chart in $(ls /mounted/); do
+  mounted_charts=$(ls /mounted/)
+  for chart in $mounted_charts; do
     if [[ -d /mounted/$chart ]] && [[ -f /mounted/$chart/Chart.yaml ]]; then
+      if [ -s /charts/$chart ]; then
+        rm /charts/$chart
+      fi
       ln -s /mounted/$chart /charts/$chart
     fi
   done
 fi
 
+available_charts=$(ls /charts/)
 if [[ "$command" == "test" ]]; then
-  for chart in $(ls /charts/); do
+  for chart in $available_charts; do
     if [[ -d /charts/$chart ]] && [[ -f /charts/$chart/Chart.yaml ]]; then
       echo "Testing chart at /charts/$chart..."
       helm lint "/charts/$chart"
@@ -49,7 +57,7 @@ if [[ "$command" == "test" ]]; then
     fi
   done
 elif [[ "$command" == "render" ]]; then
-  for chart in $(ls /charts/); do
+  for chart in $available_charts; do
     if [[ -d /charts/$chart ]] && [[ -f /charts/$chart/Chart.yaml ]]; then
       echo "Rendering chart at /charts/$chart..."
       helm template "/charts/$chart"
