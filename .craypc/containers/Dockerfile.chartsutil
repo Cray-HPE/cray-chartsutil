@@ -16,15 +16,17 @@ RUN helm init --client-only
 RUN helm plugin install https://github.com/lrills/helm-unittest
 
 ##############################
-# chart-utility
+# chartsutil
 ##############################
-FROM alpine:latest as chart-utility
+FROM alpine:latest as chartsutil
 
 COPY --from=install /usr/local/bin/kubectl /usr/local/bin/
 COPY --from=install /usr/local/bin/helm /usr/local/bin/
 COPY --from=install /root/.helm /root/.helm
 
-VOLUME [ "/charts" ]
-COPY ./entrypoint.sh /entrypoint.sh
-RUN chmod +x entrypoint.sh
-ENTRYPOINT [ "/entrypoint.sh" ]
+VOLUME [ "/mounted" ]
+RUN mkdir -p /charts
+WORKDIR /charts
+COPY ./.craypc/containers/chartsutil-entrypoint.sh /entrypoint.sh
+RUN chmod +x /entrypoint.sh
+CMD [ "/bin/sh" ]

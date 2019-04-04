@@ -1,0 +1,22 @@
+---
+version: "1.0.3"
+exec:
+  container: craypc-chartsutil
+  interactive: true
+  command: "/entrypoint.sh {{ .Arguments }}"
+  multiuse: false
+docker-compose:
+  version: "3.3"
+  services:
+    chartsutil:
+      container_name: craypc-chartsutil
+      image: "{{ .ImagesRepo }}/chartsutil:{{ .Version }}"
+      command: "tail -f /dev/null"
+      build:
+        context: ../../
+        dockerfile: .craypc/containers/Dockerfile.chartsutil
+        labels:
+          craypc.config: "{{ .ConfigHash }}"
+      volumes:
+        - "{{ .Cwd }}:/mounted"
+
