@@ -78,7 +78,7 @@ elif [[ "$command" == "render" ]]; then
       helm template "/charts/$chart"
     fi
   done
-# publish undocumented and will not be, should be no reason for it to be used outside of pipelines
+# publish undocumented, should only be used in automated pipelines, never by the end user
 elif [[ "$command" == "publish" ]]; then
   to_publish_path="$(cd /charts/$1 && pwd -P)"
   to_publish=$(ls $to_publish_path)
