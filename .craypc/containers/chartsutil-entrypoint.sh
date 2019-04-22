@@ -115,6 +115,12 @@ elif [[ "$command" == "publish" ]]; then
       fi
     fi
   done
+# unpublish undocumented, should only be used in automated pipeline testing, never by the end user
+elif [[ "$command" == "unpublish" ]]; then
+  chart_name="$1"
+  chart_version="$2"
+  cray_internal_repo_url=$(get_repo_url "cray-internal")
+  curl -X DELETE $cray_internal_repo_url/api/charts/${chart_name}/${chart_version}
 else
   echo "Command $command is invalid"
   help
