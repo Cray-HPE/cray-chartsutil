@@ -67,6 +67,9 @@ if [[ "$command" == "test" ]]; then
   for chart in $available_charts; do
     if [[ -d /charts/$chart ]] && [[ -f /charts/$chart/Chart.yaml ]]; then
       echo "Testing Helm chart at /charts/$chart..."
+      if [ -f /charts/$chart/requirements.yaml ]; then
+        helm dep up "/charts/$chart"
+      fi
       helm lint "/charts/$chart"
       helm unittest "/charts/$chart"
     fi
@@ -75,6 +78,9 @@ elif [[ "$command" == "render" ]]; then
   for chart in $available_charts; do
     if [[ -d /charts/$chart ]] && [[ -f /charts/$chart/Chart.yaml ]]; then
       echo "Rendering Helm chart at /charts/$chart..."
+      if [ -f /charts/$chart/requirements.yaml ]; then
+        helm dep up "/charts/$chart"
+      fi
       helm template "/charts/$chart"
     fi
   done
