@@ -110,7 +110,7 @@ elif [[ "$command" == "publish" ]]; then
         curl -s -L "$existing_chart_url" | tar -xzf - -C /tmp/existing
         tar -xzf $to_publish_path/$chart -C /tmp/new
         echo "Comparing existing Helm chart content to the newly packaged one"
-        if ! diff -q /tmp/existing/$chart_name /tmp/new/$chart_name &> /dev/null; then
+        if ! diff /tmp/existing/$chart_name /tmp/new/$chart_name -x '*.lock'; then
           echo "Error: Helm chart $chart_name:$chart_version has been modified, but the version number has not been incremented"
           exit 1
         fi
