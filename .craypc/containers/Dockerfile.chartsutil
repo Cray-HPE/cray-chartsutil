@@ -24,7 +24,8 @@ RUN helm plugin install https://github.com/lrills/helm-unittest
 ##############################
 FROM alpine:latest as chartsutil
 
-RUN apk add --update --no-cache curl ca-certificates jq tar
+RUN rm /usr/bin/diff
+RUN apk add --update --no-cache curl ca-certificates jq tar diffutils
 
 COPY --from=install /usr/local/bin/kubectl /usr/local/bin/
 COPY --from=install /usr/local/bin/helm /usr/local/bin/
