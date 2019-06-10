@@ -15,6 +15,8 @@ RUN helm repo add cray-internal http://helmrepo.dev.cray.com:8080
 RUN helm repo add istio-1.1.2 https://storage.googleapis.com/istio-release/releases/1.1.2/charts/
 RUN helm repo add istio-1.1.7 https://storage.googleapis.com/istio-release/releases/1.1.7/charts/
 RUN helm repo add strimzi http://strimzi.io/charts/
+RUN helm repo add banzaicloud-stable https://kubernetes-charts.banzaicloud.com
+RUN helm repo add codecentric https://codecentric.github.io/helm-charts
 RUN helm repo update
 RUN helm plugin install https://github.com/lrills/helm-unittest
 
