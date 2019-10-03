@@ -20,6 +20,20 @@ helm create /mounted/test-chart-01
 echo "===> Testing /entrypoint.sh test on /mounted/test-chart-01"
 /entrypoint.sh test
 
+echo "===> Testing /entrypoint.sh test on /mounted/test-chart-01 with invalid version"
+sed -i.bak 's/^version:.*$/version: 0.1-invalid/g' /mounted/test-chart-01/Chart.yaml
+set +e
+if /entrypoint.sh test; then
+  echo "Didn't get expected error from /entrypoint.sh test for /mounted/test-chart-01 with invalid version"
+  echo "content of Chart.yaml:"
+  echo ""
+  cat /mounted/test-chart-01/Chart.yaml
+  echo ""
+  exit 1
+fi
+mv /mounted/test-chart-01/Chart.yaml.bak /mounted/test-chart-01/Chart.yaml
+set -e
+
 echo "===> Testing /entrypoint.sh render on /mounted/test-chart-01"
 /entrypoint.sh render
 
