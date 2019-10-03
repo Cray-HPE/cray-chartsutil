@@ -72,6 +72,8 @@ if [[ "$command" == "test" ]]; then
       fi
       helm lint "/charts/$chart"
       helm unittest "/charts/$chart"
+      version=$(helm inspect chart "/charts/$chart" | grep ^version: | awk '{print $2}')
+      chart-version-validate $version
     fi
   done
 elif [[ "$command" == "render" ]]; then

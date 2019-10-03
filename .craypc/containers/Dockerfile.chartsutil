@@ -4,7 +4,8 @@
 FROM alpine:latest as build
 
 RUN rm /usr/bin/diff
-RUN apk add --update --no-cache bash git curl ca-certificates jq tar diffutils
+RUN apk add --update --no-cache bash git curl ca-certificates jq tar diffutils py-pip python
+RUN pip install semver
 
 COPY --from=dtr.dev.cray.com/loftsman/docker-kubectl:latest /usr/local/bin/kubectl /usr/local/bin/kubectl
 COPY --from=dtr.dev.cray.com/loftsman/helm:latest /usr/local/bin/helm /usr/local/bin/helm
@@ -23,6 +24,8 @@ RUN helm repo add codecentric https://codecentric.github.io/helm-charts
 RUN helm repo update
 RUN helm plugin install https://github.com/lrills/helm-unittest
 
+COPY ./.craypc/containers/chart-version-validate.py /usr/local/bin/chart-version-validate
+RUN chmod +x /usr/local/bin/chart-version-validate
 COPY ./.craypc/containers/chartsutil-entrypoint.sh /entrypoint.sh
 RUN chmod +x /entrypoint.sh
 
