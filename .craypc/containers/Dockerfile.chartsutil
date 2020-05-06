@@ -4,7 +4,7 @@
 FROM alpine:latest as build
 
 RUN rm /usr/bin/diff
-RUN apk add --update --no-cache bash git curl ca-certificates jq tar diffutils py-pip python
+RUN apk add --update --no-cache bash git curl ca-certificates jq tar diffutils py-pip python perl-utils
 RUN pip install semver
 
 COPY --from=dtr.dev.cray.com/loftsman/docker-kubectl:latest /usr/local/bin/kubectl /usr/local/bin/kubectl
