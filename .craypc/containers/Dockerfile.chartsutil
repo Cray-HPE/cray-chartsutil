@@ -19,6 +19,7 @@ RUN helm repo add istio-1.1.11 https://storage.googleapis.com/istio-release/rele
 RUN helm repo add istio-1.2.4 https://storage.googleapis.com/istio-release/releases/1.2.4/charts/
 RUN helm repo add istio-1.2.10 https://storage.googleapis.com/istio-release/releases/1.2.10/charts/
 RUN helm repo add istio-1.4.3 https://storage.googleapis.com/istio-release/releases/1.4.3/charts/
+RUN helm repo add istio-1.5.4 https://storage.googleapis.com/istio-release/releases/1.5.4/charts/
 RUN helm repo add strimzi http://strimzi.io/charts/ # For kafka
 RUN helm repo add jetstack https://charts.jetstack.io # For cert-manager
 RUN helm repo add banzaicloud-stable https://kubernetes-charts.banzaicloud.com
