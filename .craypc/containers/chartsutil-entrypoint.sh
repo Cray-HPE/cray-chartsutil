@@ -71,7 +71,7 @@ if [[ "$command" == "test" ]]; then
         helm dep up "/charts/$chart"
       fi
       helm lint "/charts/$chart"
-      helm unittest "/charts/$chart"
+      helm unittest --with-subchart=0 "/charts/$chart"
       version=$(helm inspect chart "/charts/$chart" | grep ^version: | awk '{print $2}')
       chart-version-validate $version
     fi
