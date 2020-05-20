@@ -32,16 +32,16 @@ fi
 
 function get_repo_url() {
   local repo_name="$1"
-  printf $(helm repo list | grep '^'$repo_name'\s' | awk -F ' ' '{print $2}')
+  printf "%s" $(helm repo list | grep '^'$repo_name'\s' | awk -F ' ' '{print $2}')
 }
 
 function get_chart_value() {
   local chart_path="$1"
   local chart_key="$2"
-  chart_value=$(helm inspect $chart_path | grep ^$chart_key: | head -1 | awk -F ':' '{print $2}')
+  chart_value=$(helm inspect chart $chart_path | grep ^$chart_key: | head -1 | awk -F ':' '{print $2}')
   chart_value=$(echo $chart_value | sed 's|\s+||g')
   chart_value=$(echo $chart_value | sed 's|"||g')
-  printf $chart_value
+  printf "%s" $chart_value
 }
 
 if [[ -f /mounted/Chart.yaml ]]; then
@@ -68,10 +68,15 @@ if [[ "$command" == "test" ]]; then
     if [[ -d /charts/$chart ]] && [[ -f /charts/$chart/Chart.yaml ]]; then
       echo "Testing Helm chart at /charts/$chart..."
       if [ -f /charts/$chart/requirements.yaml ]; then
-        helm dep up "/charts/$chart"
+        extra_dep_up_args=""
+        if [[ "$SKIP_HELM_DEP_UP_REFRESH" == true ]]; then
+          extra_dep_up_args=" --skip-refresh"
+        fi
+        helm dep up${extra_dep_up_args} "/charts/$chart"
+        export SKIP_HELM_DEP_UP_REFRESH=true
       fi
       helm lint "/charts/$chart"
-      helm unittest --with-subchart=0 "/charts/$chart"
+      helm unittest --helm3 --with-subchart=0 "/charts/$chart"
       version=$(helm inspect chart "/charts/$chart" | grep ^version: | awk '{print $2}')
       chart-version-validate $version
     fi
@@ -81,7 +86,12 @@ elif [[ "$command" == "render" ]]; then
     if [[ -d /charts/$chart ]] && [[ -f /charts/$chart/Chart.yaml ]]; then
       echo "Rendering Helm chart at /charts/$chart..."
       if [ -f /charts/$chart/requirements.yaml ]; then
-        helm dep up "/charts/$chart"
+        extra_dep_up_args=""
+        if [[ "$SKIP_HELM_DEP_UP_REFRESH" == true ]]; then
+          extra_dep_up_args=" --skip-refresh"
+        fi
+        helm dep up${extra_dep_up_args} "/charts/$chart"
+        export SKIP_HELM_DEP_UP_REFRESH=true
       fi
       helm template "/charts/$chart"
     fi
