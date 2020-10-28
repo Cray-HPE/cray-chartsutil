@@ -14,7 +14,7 @@ RUN wget -q https://storage.googleapis.com/kubernetes-release/release/${KUBECTL_
 RUN wget -q https://get.helm.sh/helm-${HELM_VERSION}-linux-amd64.tar.gz -O - | tar -xzO linux-amd64/helm > /usr/local/bin/helm \
     && chmod +x /usr/local/bin/helm
 
-RUN helm repo add stable https://kubernetes-charts.storage.googleapis.com/
+RUN helm repo add stable https://charts.helm.sh/stable
 RUN helm repo add cray-internal http://helmrepo.dev.cray.com:8080
 RUN helm repo add istio-1.2.10 https://storage.googleapis.com/istio-release/releases/1.2.10/charts/
 RUN helm repo add istio-1.4.3 https://storage.googleapis.com/istio-release/releases/1.4.3/charts/
