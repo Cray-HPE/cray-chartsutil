@@ -24,6 +24,7 @@ RUN helm repo add jetstack https://charts.jetstack.io # For cert-manager
 RUN helm repo add banzaicloud-stable https://kubernetes-charts.banzaicloud.com
 RUN helm repo add codecentric https://codecentric.github.io/helm-charts
 RUN helm repo add jupyterhub https://jupyterhub.github.io/helm-chart
+RUN helm repo add vmware-tanzu https://vmware-tanzu.github.io/helm-charts # For velero
 RUN helm repo update
 RUN helm plugin install https://github.com/quintush/helm-unittest
 
