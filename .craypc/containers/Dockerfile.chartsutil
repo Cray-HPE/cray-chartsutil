@@ -1,10 +1,10 @@
 ##############################
 # build
 ##############################
-FROM alpine:latest as build
+FROM alpine:3.12.4 as build
 
 RUN rm /usr/bin/diff
-RUN apk add --update --no-cache bash git curl ca-certificates jq tar diffutils py-pip python perl-utils
+RUN apk add --update --no-cache bash git curl ca-certificates jq tar diffutils py-pip python3 perl-utils
 RUN pip install semver
 
 ENV KUBECTL_VERSION=v1.18.6
